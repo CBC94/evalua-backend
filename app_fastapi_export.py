@@ -275,3 +275,72 @@ def exportar_ensayos_csv(molecula: str, patologia: Optional[str] = None):
     return StreamingResponse(io.BytesIO(output.getvalue().encode("utf-8")), media_type='text/csv', headers={
         "Content-Disposition": f"attachment;filename=ensayos_{molecula}.csv"
     })
+
+
+
+
+# -------------------- TOP CENTROS --------------------
+@app.get("/top_centros")
+def top_centros(patologia: str, pais: Optional[str] = None):
+    return {
+        "patologia": patologia,
+        "pais": pais or "Global",
+        "centros": [
+            {"nombre": "Hospital Clínic", "ensayos": 14},
+            {"nombre": "La Paz", "ensayos": 11},
+            {"nombre": "Vall d'Hebron", "ensayos": 9}
+        ]
+    }
+
+# -------------------- CAMBIOS DE ESTADO --------------------
+@app.get("/cambios_estado_recientes")
+def cambios_estado(patologia: Optional[str] = None, dias: Optional[int] = 30):
+    return {
+        "patologia": patologia or "general",
+        "dias": dias,
+        "cambios": [
+            {"id": "NCT0001", "nuevo_estado": "Reclutamiento activo", "fecha": "2024-04-01"},
+            {"id": "NCT0002", "nuevo_estado": "Finalizado", "fecha": "2024-03-27"}
+        ]
+    }
+
+# -------------------- MECANISMOS DE ACCIÓN --------------------
+@app.get("/mecanismos_accion")
+def mecanismos_accion(patologia: str):
+    return {
+        "patologia": patologia,
+        "mecanismos": ["Inhibidor de JAK", "Anti-TNF", "Modulador de IL-6"]
+    }
+
+# -------------------- MAPA DE INVESTIGACIÓN --------------------
+@app.get("/mapa_investigacion")
+def mapa_investigacion(patologia: str):
+    return {
+        "patologia": patologia,
+        "mapa": {
+            "España": 18,
+            "EEUU": 45,
+            "Francia": 10
+        }
+    }
+
+# -------------------- MOLÉCULAS POR FASE --------------------
+@app.get("/moleculas_por_fase")
+def moleculas_por_fase(fase: str, patologia: Optional[str] = None):
+    return {
+        "fase": fase,
+        "patologia": patologia or "general",
+        "moleculas": ["molécula A", "molécula B", "molécula C"]
+    }
+
+# -------------------- ENSAYOS POR BIOMARCADOR --------------------
+@app.get("/ver_ensayos_por_biomarcador")
+def ver_ensayos_por_biomarcador(biomarcador: str, patologia: Optional[str] = None):
+    return {
+        "biomarcador": biomarcador,
+        "patologia": patologia or "sin especificar",
+        "ensayos": [
+            {"id": "NCT0003", "titulo": "Estudio en pacientes ALK+", "fase": "II"},
+            {"id": "NCT0004", "titulo": "Evaluación de mutación EGFR", "fase": "III"}
+        ]
+    }
